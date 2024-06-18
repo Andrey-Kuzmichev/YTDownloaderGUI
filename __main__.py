@@ -9,7 +9,7 @@ from src.utils import resource_path
 # Telegram: t.me/bnull
 
 if __name__ == '__main__':
-    _default_clients['ANDROID_MUSIC'] = _default_clients['ANDROID_CREATOR']
+    _default_clients['ANDROID_MUSIC'] = _default_clients['WEB']
 
     root = Tk()
     root.iconbitmap(resource_path('images/app_icon.ico'))

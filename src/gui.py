@@ -14,7 +14,7 @@ from src.utils import is_valid_url, log_status, resource_path
 class App:
     def __init__(self, master):
         self.master = master
-        self.master.title('YTDownloaderGUI')
+        self.master.title('YouTube Downloader GUI')
 
         self.translations = translations
 

@@ -1,5 +1,12 @@
 # YTDownloaderGUI
 
+[![Version](https://img.shields.io/github/v/release/Andrey-Kuzmichev/YTDownloaderGUI?label=latest-release)](https://github.com/Andrey-Kuzmichev/YTDownloaderGUI/releases)
+[![License](https://img.shields.io/github/license/Andrey-Kuzmichev/YTDownloaderGUI)](LICENSE)
+![Downloads](https://img.shields.io/github/downloads/Andrey-Kuzmichev/YTDownloaderGUI/total)
+<br><br>
+[![Python](https://img.shields.io/badge/Python-3.11-3776AB.svg?style=flat&logo=python&logoColor=ffe362)](https://www.python.org)
+[![FFmpeg](https://img.shields.io/badge/FFmpeg-7-3776AB.svg?style=flat&logo=ffmpeg&logoColor=4cae4c)](https://ffmpeg.org)
+
 YTDownloaderGUI - это приложение для загрузки видео и аудио с YouTube, разработанное на Python с использованием
 библиотеки tkinter для графического интерфейса пользователя. Приложение поддерживает выбор языков (русский и
 английский), загрузку отдельных видео или целых плейлистов, а также выбор аудио и видео потоков для загрузки.

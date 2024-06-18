@@ -27,11 +27,11 @@ def generate_version_file():
                 StringTable(
                     '040904B0',
                     [
-                        StringStruct('CompanyName', 'Andrey Kuzmichev'),
-                        StringStruct('FileDescription', 'Versatile YouTube downloader with a user-friendly GUI. Supports audio and video stream selection.'),
+                        StringStruct('CompanyName', 'Andrey-Kuzmichev'),
+                        StringStruct('FileDescription', 'YouTube Downloader GUI'),
                         StringStruct('FileVersion', '{major}.{minor}.{build}_{revision}MSK'),
-                        StringStruct('InternalName', 'YTDownloaderGUI'),
-                        StringStruct('LegalCopyright', '© Andrey Kuzmichev {major}'),
+                        StringStruct('InternalName', 'YouTube Downloader GUI'),
+                        StringStruct('LegalCopyright', '© Andrey-Kuzmichev {major}'),
                         StringStruct('OriginalFilename', 'YTDownloaderGUI.exe'),
                         StringStruct('ProductName', 'YTDownloaderGUI'),
                         StringStruct('ProductVersion', '{major}.{minor}.{build}_{revision}MSK'),
@@ -41,11 +41,11 @@ def generate_version_file():
                 StringTable(
                     '041904E4',
                     [
-                        StringStruct('CompanyName', 'Андрей Кузьмичев'),
-                        StringStruct('FileDescription', 'Универсальный загрузчик YouTube с удобным графическим интерфейсом. Поддерживает выбор аудио и видео потоков.'),
+                        StringStruct('CompanyName', 'Andrey-Kuzmichev'),
+                        StringStruct('FileDescription', 'YouTube Downloader GUI'),
                         StringStruct('FileVersion', '{major}.{minor}.{build}_{revision}MSK'),
-                        StringStruct('InternalName', 'YTDownloaderGUI'),
-                        StringStruct('LegalCopyright', '© Андрей Кузьмичев {major}'),
+                        StringStruct('InternalName', 'YouTube Downloader GUI'),
+                        StringStruct('LegalCopyright', '© Andrey-Kuzmichev {major}'),
                         StringStruct('OriginalFilename', 'YTDownloaderGUI.exe'),
                         StringStruct('ProductName', 'YTDownloaderGUI'),
                         StringStruct('ProductVersion', '{major}.{minor}.{build}_{revision}MSK'),
