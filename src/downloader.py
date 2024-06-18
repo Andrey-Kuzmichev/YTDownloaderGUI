@@ -34,7 +34,12 @@ def download_audio_streams(audio_streams, chosen_indices, output_path, log_uid, 
 
 
 def download_playlist(playlist_url, output_directory, max_workers, gui):
-    playlist = Playlist(playlist_url)
+    try:
+        playlist = Playlist(playlist_url)
+    except BaseException as error:
+        log_status(gui, error.__str__())
+
+        return
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         futures = [executor.submit(download_video_audio, video_url, output_directory, gui) for video_url in
@@ -51,8 +56,14 @@ def download_playlist(playlist_url, output_directory, max_workers, gui):
 def download_video_audio(video_url, output_directory, gui):
     log_uid = generate_short_uid()
 
-    yt = YouTube(video_url)
-    video_title = sanitize_filename(yt.title)
+    try:
+        yt = YouTube(video_url)
+    except BaseException as error:
+        log_status(gui, error.__str__())
+
+        return
+
+    video_title = sanitize_filename('{} - {}'.format(yt.author, yt.video_id))
     video_output_path = os.path.join(output_directory, video_title)
 
     if not os.path.exists(video_output_path):
@@ -65,7 +76,18 @@ def download_video_audio(video_url, output_directory, gui):
     if choice in ['video', 'both']:
         log_status(gui, gui.translations[gui.lang.get()]['selecting_video_streams'], log_uid)
 
-        video_streams = yt.streams.filter(only_video=True).order_by('resolution').desc()
+        try:
+            video_streams = yt.streams.filter(only_video=True).order_by('resolution').desc()
+        except BaseException as error:
+            try:
+                os.rmdir(video_output_path)
+            except OSError:
+                pass
+
+            log_status(gui, error.__str__(), log_uid)
+
+            return
+
         if video_streams:
             gui.choose_video_streams(video_streams, video_output_path, video_title, log_uid)
         else:
@@ -74,7 +96,18 @@ def download_video_audio(video_url, output_directory, gui):
     if choice in ['audio', 'both']:
         log_status(gui, gui.translations[gui.lang.get()]['selecting_audio_streams'], log_uid)
 
-        audio_streams = yt.streams.filter(only_audio=True).order_by('abr').desc()
+        try:
+            audio_streams = yt.streams.filter(only_audio=True).order_by('abr').desc()
+        except BaseException as error:
+            try:
+                os.rmdir(video_output_path)
+            except OSError:
+                pass
+
+            log_status(gui, error.__str__(), log_uid)
+
+            return
+
         if audio_streams:
             gui.choose_audio_streams(audio_streams, video_output_path, video_title, log_uid)
         else:
