@@ -162,6 +162,7 @@ class App:
 
     def choose_audio_streams(self, audio_streams, output_path, video_title, log_uid):
         choice_window = Tk()
+        choice_window.geometry('350x400')
         choice_window.iconbitmap(resource_path('images/app_icon.ico'))
         choice_window.title(self.translations[self.lang.get()]['choose_audio_streams'].format(video_title))
 
@@ -178,6 +179,25 @@ class App:
         for i, stream in enumerate(audio_streams):
             listbox.insert(END, f"{i + 1}: {stream.mime_type}, bitrate: {stream.abr}")
 
+        def on_closing():
+            chosen_indices = listbox.curselection()
+
+            if chosen_indices:
+                ask_cancel = messagebox.askokcancel(
+                    self.translations[self.lang.get()]['video_audio_cancel_title'],
+                    self.translations[self.lang.get()]['video_audio_cancel_description'],
+                    parent=choice_window
+                )
+
+                if ask_cancel:
+                    log_status(self, self.translations[self.lang.get()]['audio_streams_canceled'], log_uid)
+                    choice_window.destroy()
+            else:
+                log_status(self, self.translations[self.lang.get()]['audio_streams_canceled'], log_uid)
+                choice_window.destroy()
+
+        choice_window.protocol('WM_DELETE_WINDOW', on_closing)
+
         def on_confirm():
             chosen_indices = listbox.curselection()
             choice_window.destroy()
@@ -193,6 +213,7 @@ class App:
 
     def choose_video_streams(self, video_streams, output_path, video_title, log_uid):
         choice_window = Tk()
+        choice_window.geometry('350x400')
         choice_window.iconbitmap(resource_path('images/app_icon.ico'))
         choice_window.title(self.translations[self.lang.get()]['choose_video_streams'].format(video_title))
 
@@ -208,6 +229,25 @@ class App:
 
         for i, stream in enumerate(video_streams):
             listbox.insert(END, f"{i + 1}: {stream.mime_type}, resolution: {stream.resolution}")
+
+        def on_closing():
+            chosen_indices = listbox.curselection()
+
+            if chosen_indices:
+                ask_cancel = messagebox.askokcancel(
+                    self.translations[self.lang.get()]['video_audio_cancel_title'],
+                    self.translations[self.lang.get()]['video_audio_cancel_description'],
+                    parent=choice_window
+                )
+
+                if ask_cancel:
+                    log_status(self, self.translations[self.lang.get()]['video_streams_canceled'], log_uid)
+                    choice_window.destroy()
+            else:
+                log_status(self, self.translations[self.lang.get()]['video_streams_canceled'], log_uid)
+                choice_window.destroy()
+
+        choice_window.protocol('WM_DELETE_WINDOW', on_closing)
 
         def on_confirm():
             chosen_indices = listbox.curselection()
