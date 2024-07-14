@@ -3,7 +3,8 @@ import threading
 from tkinter import Tk, Entry, Button, Label, Listbox, Scrollbar, END, DISABLED, NORMAL, Text, Toplevel, Radiobutton, \
     StringVar, MULTIPLE, messagebox, Scale, Menu, PhotoImage
 
-from src.downloader import download_video_audio, download_playlist, download_video_streams, download_audio_streams
+from src.downloader import download_video_audio, download_playlist, multi_download_video_streams, \
+    multi_download_audio_streams
 from src.translations import translations
 from src.utils import is_valid_url, log_status, resource_path
 
@@ -151,16 +152,14 @@ class App:
         if 'playlist' in input_url:
             threading.Thread(target=download_playlist, args=(input_url, base_path, max_workers, self)).start()
         else:
-            threading.Thread(target=self.download_single_video, args=(input_url, base_path)).start()
+            threading.Thread(target=download_video_audio, args=(input_url, base_path, max_workers, self)).start()
 
-    def download_single_video(self, input_url, base_path):
-        download_video_audio(input_url, base_path, self)
-        self.enable_download_button()
+        self.download_button.config(state=NORMAL)
 
     def enable_download_button(self):
         self.download_button.config(state=NORMAL)
 
-    def choose_video_streams(self, video_streams, output_path, video_title, log_uid):
+    def choose_video_streams(self, video_streams, output_path, max_workers, video_title, log_uid):
         choice_window = Tk()
         choice_window.geometry('350x400')
         choice_window.iconbitmap(resource_path('images/app_icon.ico'))
@@ -204,15 +203,17 @@ class App:
 
             log_status(self, self.translations[self.lang.get()]['choose_video_streams_completed'], log_uid)
 
-            threading.Thread(target=download_video_streams,
-                             args=(video_streams, chosen_indices, output_path, log_uid, self)).start()
+            threading.Thread(
+                target=multi_download_video_streams,
+                args=(video_streams, chosen_indices, output_path, max_workers, log_uid, self)
+            ).start()
 
         confirm_button = Button(choice_window, text=self.translations[self.lang.get()]['confirm'], command=on_confirm)
         confirm_button.pack()
 
         choice_window.mainloop()
 
-    def choose_audio_streams(self, audio_streams, output_path, video_title, log_uid):
+    def choose_audio_streams(self, audio_streams, output_path, max_workers, video_title, log_uid):
         choice_window = Tk()
         choice_window.geometry('350x400')
         choice_window.iconbitmap(resource_path('images/app_icon.ico'))
@@ -256,8 +257,10 @@ class App:
 
             log_status(self, self.translations[self.lang.get()]['choose_audio_streams_completed'], log_uid)
 
-            threading.Thread(target=download_audio_streams,
-                             args=(audio_streams, chosen_indices, output_path, log_uid, self)).start()
+            threading.Thread(
+                target=multi_download_audio_streams,
+                args=(audio_streams, chosen_indices, output_path, max_workers, log_uid, self)
+            ).start()
 
         confirm_button = Button(choice_window, text=self.translations[self.lang.get()]['confirm'], command=on_confirm)
         confirm_button.pack()
