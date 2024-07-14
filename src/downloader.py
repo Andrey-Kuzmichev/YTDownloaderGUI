@@ -1,7 +1,7 @@
 import os
 from concurrent.futures import ThreadPoolExecutor
 
-from pytube import YouTube, Playlist
+from pytubefix import YouTube, Playlist
 
 from src.utils import log_status, sanitize_filename, generate_short_uid
 
@@ -15,6 +15,8 @@ def download_video_streams(video_streams, chosen_indices, output_path, log_uid, 
     for idx in chosen_indices:
         video_stream = video_streams[idx]
         video_extension = video_stream.mime_type.split('/')[-1]
+
+        log_status(gui, gui.translations[gui.lang.get()]['downloading_video_start'].format(idx + 1), log_uid)
 
         try:
             video_stream.download(output_path=output_path, filename=f"video_{idx + 1}.{video_extension}")
@@ -34,6 +36,8 @@ def download_audio_streams(audio_streams, chosen_indices, output_path, log_uid, 
     for idx in chosen_indices:
         audio_stream = audio_streams[idx]
         audio_extension = audio_stream.mime_type.split('/')[-1]
+
+        log_status(gui, gui.translations[gui.lang.get()]['downloading_audio_start'].format(idx + 1), log_uid)
 
         try:
             audio_stream.download(output_path=output_path, filename=f"audio_{idx + 1}.{audio_extension}")

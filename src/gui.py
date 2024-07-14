@@ -160,57 +160,6 @@ class App:
     def enable_download_button(self):
         self.download_button.config(state=NORMAL)
 
-    def choose_audio_streams(self, audio_streams, output_path, video_title, log_uid):
-        choice_window = Tk()
-        choice_window.geometry('350x400')
-        choice_window.iconbitmap(resource_path('images/app_icon.ico'))
-        choice_window.title(self.translations[self.lang.get()]['choose_audio_streams'].format(video_title))
-
-        label = Label(choice_window, text=self.translations[self.lang.get()]['select_audio_streams'])
-        label.pack()
-
-        scrollbar = Scrollbar(choice_window)
-        scrollbar.pack(side='right', fill='y')
-
-        listbox = Listbox(choice_window, selectmode=MULTIPLE, yscrollcommand=scrollbar.set)
-        listbox.pack(side='left', fill='both', expand=True)
-        scrollbar.config(command=listbox.yview)
-
-        for i, stream in enumerate(audio_streams):
-            listbox.insert(END, f"{i + 1}: {stream.mime_type}, bitrate: {stream.abr}")
-
-        def on_closing():
-            chosen_indices = listbox.curselection()
-
-            if chosen_indices:
-                ask_cancel = messagebox.askokcancel(
-                    self.translations[self.lang.get()]['video_audio_cancel_title'],
-                    self.translations[self.lang.get()]['video_audio_cancel_description'],
-                    parent=choice_window
-                )
-
-                if ask_cancel:
-                    log_status(self, self.translations[self.lang.get()]['audio_streams_canceled'], log_uid)
-                    choice_window.destroy()
-            else:
-                log_status(self, self.translations[self.lang.get()]['audio_streams_canceled'], log_uid)
-                choice_window.destroy()
-
-        choice_window.protocol('WM_DELETE_WINDOW', on_closing)
-
-        def on_confirm():
-            chosen_indices = listbox.curselection()
-            choice_window.destroy()
-            threading.Thread(target=download_audio_streams,
-                             args=(audio_streams, chosen_indices, output_path, log_uid, self)).start()
-
-            log_status(self, self.translations[self.lang.get()]['audio_streams_completed'], log_uid)
-
-        confirm_button = Button(choice_window, text=self.translations[self.lang.get()]['confirm'], command=on_confirm)
-        confirm_button.pack()
-
-        choice_window.mainloop()
-
     def choose_video_streams(self, video_streams, output_path, video_title, log_uid):
         choice_window = Tk()
         choice_window.geometry('350x400')
@@ -252,10 +201,63 @@ class App:
         def on_confirm():
             chosen_indices = listbox.curselection()
             choice_window.destroy()
+
+            log_status(self, self.translations[self.lang.get()]['choose_video_streams_completed'], log_uid)
+
             threading.Thread(target=download_video_streams,
                              args=(video_streams, chosen_indices, output_path, log_uid, self)).start()
 
-            log_status(self, self.translations[self.lang.get()]['video_streams_completed'], log_uid)
+        confirm_button = Button(choice_window, text=self.translations[self.lang.get()]['confirm'], command=on_confirm)
+        confirm_button.pack()
+
+        choice_window.mainloop()
+
+    def choose_audio_streams(self, audio_streams, output_path, video_title, log_uid):
+        choice_window = Tk()
+        choice_window.geometry('350x400')
+        choice_window.iconbitmap(resource_path('images/app_icon.ico'))
+        choice_window.title(self.translations[self.lang.get()]['choose_audio_streams'].format(video_title))
+
+        label = Label(choice_window, text=self.translations[self.lang.get()]['select_audio_streams'])
+        label.pack()
+
+        scrollbar = Scrollbar(choice_window)
+        scrollbar.pack(side='right', fill='y')
+
+        listbox = Listbox(choice_window, selectmode=MULTIPLE, yscrollcommand=scrollbar.set)
+        listbox.pack(side='left', fill='both', expand=True)
+        scrollbar.config(command=listbox.yview)
+
+        for i, stream in enumerate(audio_streams):
+            listbox.insert(END, f"{i + 1}: {stream.mime_type}, bitrate: {stream.abr}")
+
+        def on_closing():
+            chosen_indices = listbox.curselection()
+
+            if chosen_indices:
+                ask_cancel = messagebox.askokcancel(
+                    self.translations[self.lang.get()]['video_audio_cancel_title'],
+                    self.translations[self.lang.get()]['video_audio_cancel_description'],
+                    parent=choice_window
+                )
+
+                if ask_cancel:
+                    log_status(self, self.translations[self.lang.get()]['audio_streams_canceled'], log_uid)
+                    choice_window.destroy()
+            else:
+                log_status(self, self.translations[self.lang.get()]['audio_streams_canceled'], log_uid)
+                choice_window.destroy()
+
+        choice_window.protocol('WM_DELETE_WINDOW', on_closing)
+
+        def on_confirm():
+            chosen_indices = listbox.curselection()
+            choice_window.destroy()
+
+            log_status(self, self.translations[self.lang.get()]['choose_audio_streams_completed'], log_uid)
+
+            threading.Thread(target=download_audio_streams,
+                             args=(audio_streams, chosen_indices, output_path, log_uid, self)).start()
 
         confirm_button = Button(choice_window, text=self.translations[self.lang.get()]['confirm'], command=on_confirm)
         confirm_button.pack()

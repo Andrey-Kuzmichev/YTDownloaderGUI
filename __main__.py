@@ -1,6 +1,6 @@
 from tkinter import Tk
 
-from pytube.innertube import _default_clients
+from pytubefix.innertube import _default_clients
 
 from src.gui import App
 from src.utils import resource_path
